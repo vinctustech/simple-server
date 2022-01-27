@@ -69,7 +69,7 @@ app.post('/users', async (req, res) => {
 })
 
 export const generateAccessToken = (user) =>
-  sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '20s' })
+  sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s' })
 
 //let refreshTokens = []  //todo invalidate refresh token???
 

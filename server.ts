@@ -72,8 +72,12 @@ app.post('/users', async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
     const user = { email: req.body.email, password: hashedPassword }
 
-    users.push(user)
-    res.status(201).json({})
+    if (users.find(({ email }) => email === req.body.email))
+      res.status(409).json({ error: `user '${req.body.email}' already exists` })
+    else {
+      users.push(user)
+      res.status(201).json({})
+    }
   } catch {
     res.status(500).json({})
   }

@@ -1,0 +1,39 @@
+### create user
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "email": "user1@company.com",
+  "password": "the-password"
+}
+
+### get all users
+GET http://localhost:8080/users
+
+### login user (exists)
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "user1@company.com",
+  "password": "password"
+}
+
+### get data
+GET http://localhost:8080/data
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIxIiwiaWF0IjoxNjQzMjk2MjM2LCJleHAiOjE2NDMyOTYyNTZ9.ehEZwCWGofwAUBjyALSXGHO2op1c4suWPwttZ-ciK9I
+
+### refresh
+GET http://localhost:8080/auth/refresh
+
+### login user (wrong password)
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "user1@company.com",
+  "password": "the-wrong-password"
+}
+
+### logout user
+GET http://localhost:8080/auth/logout

@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser'
 import compress from 'compression'
 import cors from 'cors'
 import dayjs from 'dayjs'
+import crypto from 'crypto'
 
 // import jwt from "express-jwt";
 
@@ -40,24 +41,7 @@ app.use(
 
 const users = []
 
-const data = [
-  {
-    email: 'user1@company.com',
-    data: 'asdf',
-  },
-  {
-    email: 'user2@company.com',
-    data: 'zxcv',
-  },
-  {
-    email: 'user1@company.com',
-    data: 'asdfasdf',
-  },
-  {
-    email: 'user2@company.com',
-    data: 'zxcvzxcv',
-  },
-]
+const data = []
 
 app.get('/users', (req, res) => {
   res.json(users)
@@ -76,6 +60,7 @@ app.post('/users', async (req, res) => {
       res.status(409).json({ error: `user '${req.body.email}' already exists` })
     else {
       users.push(user)
+      data.push({ email: user.email, data: crypto.randomBytes(10).toString('hex') })
       res.status(201).json({})
     }
   } catch {

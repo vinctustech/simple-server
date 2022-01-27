@@ -15,10 +15,10 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers['authorization']
   const token = authHeader && authHeader.split(' ')[1]
 
-  if (!token) return res.sendStatus(401)
+  if (!token) return res.status(401).json({ error: 'missing bearer token' })
 
   verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403)
+    if (err) return res.status(403).json({ error: 'error verifying access token' })
 
     res.locals.user = user
     next()
@@ -73,9 +73,9 @@ app.post('/users', async (req, res) => {
     const user = { email: req.body.email, password: hashedPassword }
 
     users.push(user)
-    res.status(201).send()
+    res.status(201).json({})
   } catch {
-    res.status(500).send()
+    res.status(500).json({})
   }
 })
 
@@ -85,7 +85,7 @@ export const generateAccessToken = (user) =>
 //let refreshTokens = []  //todo invalidate refresh token???
 
 app.get('/auth/refresh', (req, res) => {
-  if (!req.cookies?.refreshToken) return res.status(401)
+  if (!req.cookies?.refreshToken) return res.status(401).json({ error: 'no refresh token' })
 
   const refreshToken = req.cookies.refreshToken
 
@@ -93,7 +93,7 @@ app.get('/auth/refresh', (req, res) => {
 
   console.log(refreshToken)
   verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403)
+    if (err) return res.status(403).json({ error: 'error verifying refresh token' })
 
     console.log(user)
     const accessToken = generateAccessToken({ email: user.email })
